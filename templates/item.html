@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" 
+    integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <title>MBC Movies</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #181818;
+            text-align: center;
+            color: white;
+        }
+
+        a {
+            text-decoration: none;
+            color: white;
+        }
+
+        header {
+            background: linear-gradient(120deg, #ff6b08, #752e12);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+        }
+
+        #mainImage {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.37);
+            padding: 10px;
+        }
+
+        .infos {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px 20px 60px 20px;
+            border-radius: 8px;
+            text-align: left;
+            max-width: 600px;
+            margin-top: 20px;
+        }
+
+        .infos h1 {
+            font-size: 20px;
+            margin: 10px 0;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: #ff6b08;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 17px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #a54b0d;
+        }
+
+        h2 {
+            margin-top: 50px;
+        }
+
+        p {
+            font-size: 20px;
+        }
+
+        .similar-movies {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1500px;
+            margin: auto;
+        }
+
+        .movie-item {
+            background-color: #252525;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .movie-item:hover {
+            transform: scale(1.05);
+        }
+
+        .movie-item img {
+            width: 100%;
+            height: auto;
+            border-bottom: 2px solid #ff6b08;
+            border-radius: 8px;
+        }
+
+        .rating{
+            margin-top: 50px;
+            padding-right: 20px;
+            transform: translate(-50%,-50%) rotateY(180deg);
+            display: flex;
+          }
+          
+          .rating input{
+            display: none;
+          }
+
+          .rating label{
+              display: block;
+              cursor: pointer;
+              width: 50px;
+          }
+          
+          .rating label:before{
+            content: '\f005';
+            font-family: fontAwesome;
+            position: relative;
+            display: block;
+            font-size: 40px;
+            color: #0e1316;
+          }
+          
+          .rating label:after{
+            content: '\f005';
+            font-family: fontAwesome;
+            position: absolute;
+            display: block;
+            font-size: 40px;
+            color: #ffff00;
+            top: 0;
+            opacity: 0;
+            transition: .5;
+            text-shadow: 0 4px 5px rgba(0, 0, 0, .5);
+          }
+          .rating label:hover:after,
+          .rating label:hover ~ label:after,
+          .rating input:checked ~ label:after{
+            opacity: 1;
+          }
+
+          #buttonRate {
+            margin-right: 10px;   
+          }
+    </style>    
+</head>
+<body>  
+    <header>
+        <a href="http://127.0.0.1:8000/homePage"><h1>MBC Movies | {{ username }}</h1></a>
+        <nav>
+            <a href="http://127.0.0.1:8000/myMovies">Meus Filmes</a>
+            <a href="http://127.0.0.1:8000/logout">Logout</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <img id="mainImage" src="{{ imagem }}" alt="{{ title }}">
+        
+        <h3 id="mediaRate">⭐{{ mediaRate }}</h3>
+
+        <div class="infos">
+            <h1>🎭 Gênero: {{ genders }}</h1>
+            <h1>📅 Lançamento: {{ release }}</h1>
+            <h1>📜 Sinopse:</h1>
+            <p>{{ sinopse }}</p>
+            <form action="http://127.0.0.1:8000/rateMovie">
+                <div class="rating">
+                    <button id="buttonRate" type="submit"><</button>
+                    <input type="radio" name="star" id="star1" value="5"><label for="star1"></label>
+                    <input type="radio" name="star" id="star2" value="4"><label for="star2"></label>
+                    <input type="radio" name="star" id="star3" value="3"><label for="star3"></label>
+                    <input type="radio" name="star" id="star4" value="2"><label for="star4"></label>
+                    <input type="radio" name="star" id="star5" value="1"><label for="star5"></label>
+                    <input type="hidden" name="movie" value="{{ title }}"> 
+                </div>
+            </form>
+        </div>
+
+        <form action="http://127.0.0.1:8000/saveMovie/" method="get">
+            <input type="hidden" name="title" value="{{ title }}">
+            <input type="hidden" name="genders" value="{{ genders }}">
+            <input type="hidden" name="movieRelease" value="{{ release }}">
+            <button type="submit">Save</button>
+        </form>
+
+        <h2>🎬 Similar Movies</h2>
+        <div class="similar-movies">
+            {% for film in similarFilms %}
+                <div class="movie-item">
+                    <a href="http://127.0.0.1:8000/search/{{ film['title'] }}">
+                        <img src="{{ similarPosters[loop.index0] }}" alt="{{ film['title'] }}">
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

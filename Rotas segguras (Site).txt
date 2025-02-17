@@ -1,0 +1,82 @@
+Forma segura de criar hotas e login fastapi
+
+Funções:
+	def hash_password(password): #import bcrypt
+		#retorna a senha hasehada
+    		return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
+	def check_password(password_hashed, user_password): #import bcrypt
+		#verifica se a senha colocada pelo usuario bate com a senha hasheada
+		#retorna 0 para sucesso e 1 para falha
+    		return bcrypt.checkpw(user_password.encode('utf-8'), password_hashed.encode())
+
+
+
+	def create_jwt(user_id: int): #import jwt
+		SECRET_KEY = "*UgtU@66TR--pDf44e" # armazenar fora da função, como variavel de ambiente
+		ALGORITHM = "HS256# # armazenar fora da função, como variavel de ambiente
+    		payload = {"user_id": user_id}
+    		token = jwt.encode(payload, SECRET_KEY, algorithm = ALGORITHM)
+    
+    		return token
+
+
+
+Login:
+	url="/": # Apaga todos o cookies ja presentes e retorna o html de login
+		def login_cadastro(request: Request, response: Response):
+			response = templates.TemplateResponse(
+        			request = request, name = "login.html"
+   	 		)
+    			response.delete_cookie("auth_token")
+    
+    			return response
+
+	url="/createUser": # Recebe o nome do usuario e a senha. A senha deve ser hasehada e armazenada no banco
+		def create_user(newUser: str, newPassword: str):
+    			hashedPassword = hash_password(newPassword)
+    			user = userModel(user_id = create_id(), username = newUser, password = hashedPassword)
+    			addUserDb(user)
+    
+    		return RedirectResponse(url="/")
+
+	url="/loginUser": #recebe o nome e aenha do usuario, manda para a função "checkLogin" que pega a senha hasheada no banco de dados, e manda para a função "checkPassword"
+		def login_user(loginUser: str = Form(...), loginPassword: str = Form(...)):
+    			if checkLogin(loginUser, loginPassword) == 0:
+        			userId = takeId(loginUser)
+        
+        			token = create_jwt(userId)
+        			response = RedirectResponse(url="/homePage", status_code=303)
+        			response.set_cookie(key="auth_token", value=token, httponly=True, samesite="Lax", expires=timedelta(minutes=30))
+        
+        			return response
+        
+    			else: return {'message': 'Falha no Login'}
+			
+			# se o login for bem sucessido, é criado um cookie do usuario, para que ele permaneca logado.
+
+Cookie:
+	def get_current_user(request: Request):
+		SECRET_KEY = "*UgtU@66TR--pDf44e"
+		ALGORITHM = "HS256"
+    		token = request.cookies.get("auth_token")
+    		if not token:
+        		raise HTTPException(status_code=401, detail="Não autenticado. É necessário fazer login para acessar essa página")
+
+    		try:
+        		payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        		user_id = payload.get("user_id")
+        		if user_id is None:
+            			raise HTTPException(status_code=401, detail="Token inválido")
+   	 	except PyJWTError:
+        		raise HTTPException(status_code=401, detail="Token inválido")
+
+    		return user_id
+
+	# Sempre que for necessario pegar o user id do usuario que está logado, basta usar a seguinte linha de codigo na definição da função: "user_id: dict = Depends(get_current_user)"
+	# Exemplo:
+ 
+		"def read_root(request: Request, film_name: str, user_id: dict = Depends(get_current_user)):"
+		
+		
+		

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #202020;
+            color: white;
+        }
+
+        header {
+            background: linear-gradient(120deg, #ff6b08, #752e12);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 24px;
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+        }   
+
+        a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+            color: #ff9b06;
+        }
+
+        .erro {
+            padding: 100px 30px 30px 30px;
+            text-align: center;
+        }
+
+        img {
+            max-height: 1000px;
+            padding: 45px;
+        }
+
+        #erroMessage {
+            padding-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="http://127.0.0.1:8000/homePage"><h1>MBC Movies | {{ username }}</h1></a>
+        <nav>
+            <a href="http://127.0.0.1:8000/myMovies">Meus Filmes</a>
+            <a href="http://127.0.0.1:8000/logout">Logout</a>
+        </nav>
+    </header>           
+
+    <div class="erro">  
+        <h2 id="erroMain">Erro</h2>
+        <h3 id="erroMessage"> {{ message }} </h3>
+        <img src="https://files.tecnoblog.net/wp-content/uploads/2021/01/BSOD-tela-azul.png" alt="error">
+    </div>
+    
+</body>                 
+</html>                         

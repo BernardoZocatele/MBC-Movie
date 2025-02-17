@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBC Movies</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #202020;
+            color: white;
+        }
+
+        header {
+            background: linear-gradient(120deg, #ff6b08, #752e12);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 24px;
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+            color: #ff9b06;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .search-container form {
+            display: flex;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 10px;
+            align-items: center;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            width: 250px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            background-color: rgba(255, 255, 255, 0.8);
+            outline: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 15px;
+            background: linear-gradient(120deg, #ff6b08, #752e12);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(120deg, #a54b0d, #4b1d0b);
+            transform: scale(1.05);
+        }
+
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            padding: 40px;
+        }
+
+        .movie {
+            text-align: center;
+            transition: transform 0.3s ease;
+            padding: 10px;
+            
+        }
+
+        .movie:hover {
+            transform: scale(1.05);
+        }
+
+        .movie img {
+            width: 100%;
+            max-height: 750px; /* Aumentado de 600px para 750px */
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            nav {
+                margin-top: 10px;
+            }
+
+            .search-container form {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            input[type="text"] {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>  
+
+    <header>
+        <h1>MBC Movies | {{ username }}</h1>
+        <nav>
+            <a href="http://127.0.0.1:8000/myMovies">Meus Filmes</a>
+            <a href="http://127.0.0.1:8000/logout">Logout</a>
+        </nav>
+    </header>
+
+    <div class="search-container">
+        <form action="http://127.0.0.1:8000/temp" method="get">
+            <input type="text" name="q" placeholder="Procurar Filme" required>
+            <button type="submit">Ver</button>
+        </form>
+    </div>
+    
+    <div class="movies-grid">
+        {% for film in filmes %}
+        <div class="movie">
+            <a href="http://127.0.0.1:8000/search/{{ film['title'] }}">
+                <img src="{{ posters[loop.index0] }}" alt="{{ film['title'] }}">
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    
+</body>
+</html>

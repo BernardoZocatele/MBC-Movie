@@ -69,7 +69,6 @@ def get_gender(gender_id):
                 
     return gender_list
 
-
 def buscar_filme(nome_filme):
     url = f"https://api.themoviedb.org/3/search/movie?api_key={API_KEY}&query={nome_filme}"
     
@@ -77,7 +76,7 @@ def buscar_filme(nome_filme):
     if resposta.status_code == 200:
         dados = resposta.json()
         if dados['results']:
-            filme = dados['results'][0]  # Pega o primeiro resultado
+            filme = dados['results'][0]
             
             titulo = filme['title']
             sinopse = filme['overview']
@@ -91,7 +90,6 @@ def buscar_filme(nome_filme):
             return "Nenhum filme encontrado."
     else:
         return f"Erro na API: {resposta.status_code}"
-
 
 def popularFilms():
     url = f'https://api.themoviedb.org/3/movie/popular?api_key={API_KEY}'
@@ -112,13 +110,11 @@ def popularFilms():
     else:
         return 1
     
-
 def create_id():
     random_id = random.randrange(0,10000)
     
     while checkId(random_id) != 0:
         random_id = random.randrange(0,10000)
-        # enquanto a verificaçõ falhar, outro id será gerado
     return random_id
 
 def similar_films(id: int, title):

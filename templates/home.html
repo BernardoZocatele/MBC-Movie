@@ -89,7 +89,7 @@
 
         .movies-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
             padding: 40px;
         }
@@ -142,15 +142,15 @@
     <header>
         <h1>MBC Movies | {{ username }}</h1>
         <nav>
-            <a href="http://127.0.0.1:8000/myMovies">Meus Filmes</a>
+            <a href="http://127.0.0.1:8000/myMovies">My Movies</a>
             <a href="http://127.0.0.1:8000/logout">Logout</a>
         </nav>
     </header>
 
     <div class="search-container">
         <form action="http://127.0.0.1:8000/temp" method="get">
-            <input type="text" name="q" placeholder="Procurar Filme" required>
-            <button type="submit">Ver</button>
+            <input type="text" name="q" placeholder="Search" required>
+            <button type="submit">➔</button>
         </form>
     </div>
     

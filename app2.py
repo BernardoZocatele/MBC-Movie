@@ -1,4 +1,4 @@
-from database_connect import addUserDb, checkLogin, takeId, saveMovieDB, takeUsername, takeMyMovies, checkSaveMovie, takeVotes, mediaRate
+from database_connect import addUserDb, checkLogin, takeId, saveMovieDB, takeUsername, takeMyMovies, checkSaveMovie, takeVotes, mediaRate, checkLastRate, createUserVoteHistory
 from datetime import timedelta
 from fastapi import FastAPI, Request, Query, Form, Request, HTTPException, Depends, Response 
 from fastapi.templating import Jinja2Templates 
@@ -152,32 +152,30 @@ def getMyMovies(request: Request, user_id: dict = Depends(get_current_user)):
     
 @app.get('/rateMovie', response_class = RedirectResponse)
 def rateMovie(request: Request, star: int, movie: str, user_id: dict = Depends(get_current_user)):
-    if takeVotes(movie, star) == 0:
-        return RedirectResponse(url=f'/search/{movie}')
-    else:
-        username = takeUsername(user_id)
-        message = "Não foi possível avaliar o filme, tente mais tarde!"
+    
+    # Adicionar algumas Verificações, seguindo instruções do arquivo terminar.txt
+    
+    # Jogar na funação que ve se o usuario já salvou o filme. Se tiber salvo ele continua, caso contrário, retorna erro.
+    # Caso seja liberado, verificar qual o valor da avaliação no banco, se for -1 vai para função (takeVotes)m se for diferente, tem que criar uma função para trocar a avaliação.
+    
+    # Joga para essa função apenas se o filmes estiver adicionado pelo usuário e se o valoor no banco de dados for 1
+    username = takeUsername(user_id)
+    
+    if checkSaveMovie(movie, user_id) == 1:
         
+        checkLastRate(user_id, movie)
+        
+        if takeVotes(movie, star) == 0:
+            createUserVoteHistory(movie, star, user_id)
+            return RedirectResponse(url=f'/search/{movie}')
+        else:
+            message = "Não foi possível avaliar o filme, tente mais tarde!"
+            
+            return templates.TemplateResponse(
+                request = request, name = "error.html", context={"username": username, "message": message}
+            )
+    else:
+        message = "É preciso salvar o filme para avaliar" 
         return templates.TemplateResponse(
             request = request, name = "error.html", context={"username": username, "message": message}
         )
-    
-@app.get('/erro/', response_class = HTMLResponse)
-def returnErro(request = Request, user_id: dict = Depends(get_current_user)):
-    username = takeUsername(user_id)
-    
-    return templates.TemplateResponse(
-        request = request, name = "error.html", context={"username": username}
-    )
-
-    
-    
-    
-        
-
-
-
-
-
-    
-    

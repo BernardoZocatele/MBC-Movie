@@ -167,3 +167,35 @@ def mediaRate(movie: str):
     if result:
         return result[0]
     else: return 0   
+    
+def deleteVote(vote, movie):
+    cursor, connector = connectDB()
+    cursor.execute("Select media, votes from rate where movie = ?", (movie, ))
+    results = cursor.fetchone()
+    
+    temp = float(results[0])*float(results[1])
+    temp -= vote
+    qtdVotes = results[1] - 1
+    
+    cursor.execute("update rate set media = ?, votes = ? where movie = ?", (temp, qtdVotes, movie))
+    connector.commit()
+    connector.close()
+    
+def checkLastRate(user_id, movie):
+    cursor, connector = connectDB()
+    cursor.execute("Select rate from movies where id = ? and movie = ?", (user_id, movie))
+    result = cursor.fetchone()
+    print(result)
+    
+    connector.close()
+    if result[0] != None:
+        # jogar para função que apaga o voto antigo e atualiza.
+        deleteVote(result[0], movie)
+        
+def createUserVoteHistory(movie, star, user_id):
+    cursor, connector = connectDB()
+    cursor.execute("update movies set rate = ? where movie = ? and id = ?", (star, movie, user_id))
+    connector.commit()
+    connector.close()
+        
+    

@@ -1,0 +1,15 @@
+O usuario so pode avaliar um filme caso o mesmo seja salvo em "My Movies"
+
+Quando o usuario avaliar o filme, fazer a verificação na tabela movies:
+    Caso o nome esteja na tabela, usando seu id como parametro de pesquisa:
+        Verificar se a coluna rate for diferente de -1:
+            Caso seja diferente de -1:
+                O Usuário já avaliou o filme e o valor mostrado foi sua avaliação. Quando ele avaliar novamente, deverá ser feita a seguinte conta:
+                   Nova Média = ((Media Das Avaliações * QTD de Votos) - Avaliação antiga) / (QTD de Votos - 1)
+                   Media Final = ((Nova Média * (QTD de Votos - 1)) + Avaliação nova) / QTD de Votos 
+
+            Caso seja = -1:
+                Fazer o procedimento padrao de avaliação, já criado.
+
+    Caso não esteja na tabela:
+        Notificar que o filme deve ser salvo.

@@ -49,6 +49,17 @@ def checkId(random_id):
         if random_id == user_id:
             return 1 #Falha na operação, id ja existente
     return 0 #sucesso, poassou por todos ids sem encontrar um igual
+
+def checkUser(usuario):
+    cursor, connector = connectDB()
+    cursor.execute("SELECT * FROM users where username = ?", (usuario, ))
+    result = cursor.fetchone
+    
+    if result:
+        # Usuário encontrado
+        return 1
+    else:
+        return 0
     
 
 def checkLogin(loginUser, loginPassword):

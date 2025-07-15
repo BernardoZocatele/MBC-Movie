@@ -191,7 +191,7 @@
     <header>
         <a href="http://127.0.0.1:8000/homePage"><h1>MBC Movies | {{ username }}</h1></a>
         <nav>
-            <a href="http://127.0.0.1:8000/myMovies">Meus Filmes</a>
+            <a href="http://127.0.0.1:8000/myMovies">My movies</a>
             <a href="http://127.0.0.1:8000/logout">Logout</a>
         </nav>
     </header>
@@ -202,8 +202,8 @@
         <h3 id="mediaRate">⭐{{ mediaRate }}</h3>
 
         <div class="infos">
-            <h1>🎭 Gênero: {{ genders }}</h1>
-            <h1>📅 Lançamento: {{ release }}</h1>
+            <h1>🎭 Genre: {{ genders }}</h1>
+            <h1>📅 Release: {{ release }}</h1>
             <h1>📜 Sinopse:</h1>
             <p>{{ sinopse }}</p>
             <form action="http://127.0.0.1:8000/rateMovie">
@@ -226,7 +226,7 @@
             <button type="submit">Save</button>
         </form>
 
-        <h2>🎬 Similar Movies</h2>
+        <h2>🎬 Related movies</h2>
         <div class="similar-movies">
             {% for film in similarFilms %}
                 <div class="movie-item">

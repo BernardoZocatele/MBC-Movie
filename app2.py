@@ -1,15 +1,15 @@
-from database_connect import addUserDb, checkLogin, takeId, saveMovieDB, takeUsername, takeMyMovies, checkSaveMovie, takeVotes, mediaRate, checkLastRate, createUserVoteHistory
+from database_connect import addUserDb, checkLogin, takeId, saveMovieDB, takeUsername, takeMyMovies, checkSaveMovie, takeVotes, mediaRate, checkLastRate, createUserVoteHistory, checkUser
 from datetime import timedelta
 from fastapi import FastAPI, Request, Query, Form, Request, HTTPException, Depends, Response 
 from fastapi.templating import Jinja2Templates 
 from fastapi.responses import HTMLResponse, RedirectResponse
+from starlette.status import HTTP_303_SEE_OTHER
 from function import buscar_filme, get_gender, create_id, popularFilms, similar_films
 from get_images import get_poster
 from hashe import hash_password
 from schemas import filmModel, userModel
 from auth_utils import create_jwt
-from jwt import PyJWTError
-import jwt
+from jose import JWTError, jwt
 
 SECRET_KEY = "*UgtU@66TR--pDf44e"
 ALGORITHM = "HS256"
@@ -28,31 +28,31 @@ def get_current_user(request: Request):
         user_id = payload.get("user_id")
         if user_id is None:
             raise HTTPException(status_code=401, detail="Token inválido")
-    except PyJWTError:
+    except JWTError:
         raise HTTPException(status_code=401, detail="Token inválido")
 
     return user_id
 
 # LOGIN AREA
 
-@app.get('/')   
-def login_cadastro(request: Request, response: Response):
-    
-    response = templates.TemplateResponse(
-        request = request, name = "login.html"
-    )
+@app.get("/")
+def login_cadastro(request: Request):
+    response = templates.TemplateResponse("login.html", {"request": request})
     response.delete_cookie("auth_token")
-    
     return response
 
-@app.get('/createUser/')
-def create_user(newUser: str, newPassword: str):
-    hashedPassword = hash_password(newPassword)
-    user = userModel(user_id = create_id(), username = newUser, password = hashedPassword)
-    addUserDb(user)
-    
-    return RedirectResponse(url="/")
+@app.post("/createUser")
+def create_user(newUser: str = Form(...), newPassword: str = Form(...)):
+    if (checkUser(newUser) == 0):
+        hashedPassword = hash_password(newPassword)
+        user = userModel(user_id=create_id(), username=newUser, password=hashedPassword)
+        addUserDb(user)
 
+        return RedirectResponse(url="/", status_code=HTTP_303_SEE_OTHER)
+    else:
+        return {'error', 'usuário já existe no banco'}
+        
+    
 @app.post("/loginUser")
 def login_user(loginUser: str = Form(...), loginPassword: str = Form(...)):
     if checkLogin(loginUser, loginPassword) == 0:
@@ -123,9 +123,6 @@ async def redirect_search( q: str = Query(...)):
     return RedirectResponse(url=f"/search/{q}")
 
 
-# DATA BASE MOVIE AREA
-
-
 @app.get('/saveMovie', response_class = RedirectResponse)
 def addMovie(request: Request, title: str, genders: str, movieRelease: str, user_id: dict = Depends(get_current_user)):
     
@@ -153,12 +150,6 @@ def getMyMovies(request: Request, user_id: dict = Depends(get_current_user)):
 @app.get('/rateMovie', response_class = RedirectResponse)
 def rateMovie(request: Request, star: int, movie: str, user_id: dict = Depends(get_current_user)):
     
-    # Adicionar algumas Verificações, seguindo instruções do arquivo terminar.txt
-    
-    # Jogar na funação que ve se o usuario já salvou o filme. Se tiber salvo ele continua, caso contrário, retorna erro.
-    # Caso seja liberado, verificar qual o valor da avaliação no banco, se for -1 vai para função (takeVotes)m se for diferente, tem que criar uma função para trocar a avaliação.
-    
-    # Joga para essa função apenas se o filmes estiver adicionado pelo usuário e se o valoor no banco de dados for 1
     username = takeUsername(user_id)
     
     if checkSaveMovie(movie, user_id) == 1:

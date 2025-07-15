@@ -52,15 +52,13 @@ def checkId(random_id):
 
 def checkUser(usuario):
     cursor, connector = connectDB()
-    cursor.execute("SELECT * FROM users where username = ?", (usuario, ))
-    result = cursor.fetchone
+    cursor.execute("SELECT 1 FROM users WHERE username = ?", (usuario,))
+    result = cursor.fetchone()
     
-    if result:
-        # Usuário encontrado
-        return 1
+    if not result:
+        return 1 #usuario não econtrado
     else:
-        return 0
-    
+        return 0    
 
 def checkLogin(loginUser, loginPassword):
     cursor, connector = connectDB()

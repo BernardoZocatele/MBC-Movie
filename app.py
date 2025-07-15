@@ -43,14 +43,15 @@ def login_cadastro(request: Request):
 
 @app.post("/createUser")
 def create_user(newUser: str = Form(...), newPassword: str = Form(...)):
+    
     if (checkUser(newUser) == 0):
+        return {'error', 'usuário já existe no banco'}
+    else:
         hashedPassword = hash_password(newPassword)
         user = userModel(user_id=create_id(), username=newUser, password=hashedPassword)
         addUserDb(user)
 
         return RedirectResponse(url="/", status_code=HTTP_303_SEE_OTHER)
-    else:
-        return {'error', 'usuário já existe no banco'}
         
     
 @app.post("/loginUser")

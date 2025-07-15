@@ -189,10 +189,10 @@
 </head>
 <body>  
     <header>
-        <a href="http://127.0.0.1:8000/homePage"><h1>MBC Movies | {{ username }}</h1></a>
+        <a href="https://mbc-movie.onrender.com/homePage"><h1>MBC Movies | {{ username }}</h1></a>
         <nav>
-            <a href="http://127.0.0.1:8000/myMovies">My movies</a>
-            <a href="http://127.0.0.1:8000/logout">Logout</a>
+            <a href="https://mbc-movie.onrender.com/myMovies">My movies</a>
+            <a href="https://mbc-movie.onrender.com/logout">Logout</a>
         </nav>
     </header>
 
@@ -206,7 +206,7 @@
             <h1>📅 Release: {{ release }}</h1>
             <h1>📜 Sinopse:</h1>
             <p>{{ sinopse }}</p>
-            <form action="http://127.0.0.1:8000/rateMovie">
+            <form action="https://mbc-movie.onrender.com/rateMovie">
                 <div class="rating">
                     <button id="buttonRate" type="submit"><</button>
                     <input type="radio" name="star" id="star1" value="5"><label for="star1"></label>
@@ -219,7 +219,7 @@
             </form>
         </div>
 
-        <form action="http://127.0.0.1:8000/saveMovie/" method="get">
+        <form action="https://mbc-movie.onrender.com/saveMovie/" method="get">
             <input type="hidden" name="title" value="{{ title }}">
             <input type="hidden" name="genders" value="{{ genders }}">
             <input type="hidden" name="movieRelease" value="{{ release }}">
@@ -230,7 +230,7 @@
         <div class="similar-movies">
             {% for film in similarFilms %}
                 <div class="movie-item">
-                    <a href="http://127.0.0.1:8000/search/{{ film['title'] }}">
+                    <a href="https://mbc-movie.onrender.com/search/{{ film['title'] }}">
                         <img src="{{ similarPosters[loop.index0] }}" alt="{{ film['title'] }}">
                     </a>
                 </div>

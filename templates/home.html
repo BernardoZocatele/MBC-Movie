@@ -142,13 +142,13 @@
     <header>
         <h1>MBC Movies | {{ username }}</h1>
         <nav>
-            <a href="http://127.0.0.1:8000/myMovies">My Movies</a>
-            <a href="http://127.0.0.1:8000/logout">Logout</a>
+            <a href="https://mbc-movie.onrender.com/myMovies">My Movies</a>
+            <a href="https://mbc-movie.onrender.com/logout">Logout</a>
         </nav>
     </header>
 
     <div class="search-container">
-        <form action="http://127.0.0.1:8000/temp" method="get">
+        <form action="https://mbc-movie.onrender.com/temp" method="get">
             <input type="text" name="q" placeholder="Search" required>
             <button type="submit">➔</button>
         </form>
@@ -157,7 +157,7 @@
     <div class="movies-grid">
         {% for film in filmes %}
         <div class="movie">
-            <a href="http://127.0.0.1:8000/search/{{ film['title'] }}">
+            <a href="https://mbc-movie.onrender.com/search/{{ film['title'] }}">
                 <img src="{{ posters[loop.index0] }}" alt="{{ film['title'] }}">
             </a>
         </div>
